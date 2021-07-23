@@ -29,7 +29,7 @@ class HomeController extends AbstractController
         //$em->persist($product); => Seulement si l'entité n'existe pas
         //$em->flush();
 
-
+phpinfo();
         return $this->render('home/home.html.twig');
     }
 }
