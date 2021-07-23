@@ -21,7 +21,7 @@ class HomeController extends AbstractController
 
         //$product = new Product;
         $productRepository = $em->getRepository(Product::class);
-        $product = $productRepository->find(2);
+        $products = $productRepository->findBy([], [], 3);
         //$product->setPrice(3500);
 
         //$em->remove($product);
@@ -29,7 +29,6 @@ class HomeController extends AbstractController
         //$em->persist($product); => Seulement si l'entité n'existe pas
         //$em->flush();
 
-phpinfo();
-        return $this->render('home/home.html.twig');
+        return $this->render('home/home.html.twig', ["products"=>$products]);
     }
 }

@@ -17,6 +17,7 @@
         "fzaninotto/faker": "^1.9",
         "liorchamla/faker-prices": "^2.0",
         "mbezhanov/faker-provider-collection": "^1.2",
+        "mmo/faker-images": "^0.3.0",
         "phpdocumentor/reflection-docblock": "^5.2",
         "sensio/framework-extra-bundle": "^6.1",
         "symfony/asset": "5.3.*",
