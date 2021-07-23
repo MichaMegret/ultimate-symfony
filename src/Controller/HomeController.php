@@ -19,9 +19,10 @@ class HomeController extends AbstractController
         // $product=$productRepository->findOneBy(["slug"=>"chaise-en-bois"], ["name"=>"DESC"]);
         // dd($product);
 
-        //$product = new Product;
         $productRepository = $em->getRepository(Product::class);
         $products = $productRepository->findBy([], [], 3);
+        
+        //$product = new Product;
         //$product->setPrice(3500);
 
         //$em->remove($product);
