@@ -1,0 +1,34 @@
+{% extends "base.html.twig" %}
+
+{# {% form_theme formView _self %} ==> Pour utiliser le theme predefini dans un fichier, ici _self, voir twig.yaml pour definition global #}
+
+{% block title %}Nouvelle catégorie{% endblock %}
+
+{% block body %}
+    <h1>Nouvelle catégorie</h1>
+
+    {#{form(formView)}#}
+
+    {{form_start(formView)}}
+    
+    {{form_errors(formView)}}
+
+    <div class="row">
+        <div class="col">
+            {{form_row(formView.name)}}
+        </div>
+    </div>
+    
+    {#{form_widget(formView)}#}
+
+    {#{form_row(formView.name)}#}
+
+    
+    <button type="submit" class='btn btn-primary mt-4'>
+        <i class="fas fa-save"></i>
+        Ajouter la catégorie
+    </button>
+
+    {{form_end(formView)}}
+
+{% endblock %}

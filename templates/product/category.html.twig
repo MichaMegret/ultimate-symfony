@@ -1,0 +1,26 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    Catégorie : {{slug}}
+{% endblock %}
+
+{% block body %}
+
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{{path("homepage")}}">Home</a>
+        </li>
+        <li class="breadcrumb-item active">{{category.name}}</li>
+    </ol>
+
+    <h1>Catégorie : {{category.name}}</h1>
+
+    <div class="row">
+    {% for p in category.products %}
+    {% include "Shared/_productCard.html.twig" with {
+            "p": p,
+            "col": "-3"
+        } %}
+    {% endfor %}
+    </div>
+{% endblock %}

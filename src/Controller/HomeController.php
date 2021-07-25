@@ -21,14 +21,14 @@ class HomeController extends AbstractController
 
         $productRepository = $em->getRepository(Product::class);
         $products = $productRepository->findBy([], [], 3);
-        
+
         //$product = new Product;
         //$product->setPrice(3500);
 
-        //$em->remove($product);
-
+        //$em->remove($product); => Pour supprimer un produit préalablement séléctionné
         //$em->persist($product); => Seulement si l'entité n'existe pas
         //$em->flush();
+        
 
         return $this->render('home/home.html.twig', ["products"=>$products]);
     }
