@@ -14,6 +14,27 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CategoryController extends AbstractController
 {
+
+    // Si on veut passer une instance de CategoryRepository sans déclarer de globals dans twig.yaml il faut créer une méthode 
+    // de controller accessible par la fonction render(controller()) dans twig (pas optimiser, choisir la méthode des globals)
+    // protected $categoryRepository;
+
+    // public function __construct(CategoryRepository $categoryRepository){
+    //     $this->categoryRepository = $categoryRepository;
+    // }
+
+
+    public function renderMenuList(){
+        // 1. Aller chercher les catégorie existantes dans la base de données
+        $category = $this->categoryRepository->findAll();
+
+        // 2. Faire un rendu HTML sous forme de Response ($this->render)
+        return $this->render("Shared/_navbar_category.html.twig", [
+            "category"=>$category
+        ]);
+    }
+
+
     /**
      * @Route("/admin/category/create", name="category_create")
      */
@@ -25,7 +46,7 @@ class CategoryController extends AbstractController
 
         $form->handleRequest($request);
 
-        if($form->isSubmitted()){
+        if($form->isSubmitted() && $form->isValid()){
             $category->setSlug(strtolower($slugify->slugify($category->getName())));
             $em->persist($category);
             $em->flush();
@@ -53,7 +74,7 @@ class CategoryController extends AbstractController
 
         $form->handleRequest($request);
 
-        if($form->isSubmitted()){
+        if($form->isSubmitted() && $form->isValid()){
             $category->setSlug(strtolower($slugify->slugify($category->getName())));
             $em->flush();
 

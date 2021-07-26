@@ -1,0 +1,6 @@
+{# {% for cat in category %} => Si category transmise à l'aide de render(controller()) #}
+{% for cat in categoryRepository.findAll() %} {# Repository donner en variable global depuis twig.yaml#}
+    <li class="vav-item">
+        <a class='nav-link' href="/{{ cat.slug }}">{{ cat.name }}</a>
+    </li>
+{% endfor %}

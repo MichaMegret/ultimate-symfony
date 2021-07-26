@@ -2,6 +2,10 @@ twig:
     default_path: '%kernel.project_dir%/templates'
     form_themes:
         - bootstrap_4_layout.html.twig 
+    globals:
+        # permet de difinir des variables globales pour yous les template twig
+        categoryRepository: "@App\\Repository\\CategoryRepository" 
+        #Il est préférable de créer une classe nous même, étendue depuis CategoryRepository 
 
 when@test:
     twig:
