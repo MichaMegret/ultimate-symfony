@@ -2,28 +2,22 @@
 
 namespace App\Controller;
 
-use App\Entity\Category;
 use App\Entity\Product;
 use App\Form\ProductType;
-use App\Repository\CategoryRepository;
-use App\Repository\ProductRepository;
 use Cocur\Slugify\Slugify;
+use App\Repository\ProductRepository;
+use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Symfony\Component\Form\Extension\Core\Type\MoneyType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\UrlType;
-use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Validator\Constraints\Choice;
+use Symfony\Component\Validator\Constraints\Collection;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ProductController extends AbstractController
 {
@@ -143,7 +137,7 @@ class ProductController extends AbstractController
 
         $form->handleRequest($request);
         
-        if($form->isSubmitted()){
+        if($form->isSubmitted() && $form->isValid()){
             $data = $form->getData();
 
             // $product = new Product;
@@ -188,15 +182,129 @@ class ProductController extends AbstractController
     /**
      *@Route("/admin/product/{id}/edit", name="product_edit")
      */
-    public function edit($id, ProductRepository $productRepository, Request $request, EntityManagerInterface $em, UrlGeneratorInterface $urlGenerator, Slugify $slugify){
+    public function edit($id, ProductRepository $productRepository, Request $request, EntityManagerInterface $em, UrlGeneratorInterface $urlGenerator, Slugify $slugify,
+    ValidatorInterface $validator){
 
+
+        //-------------------------------------------------------------------------------------------------------------------------
+        // Validation de donnée simple
+        //-------------------------------------------------------------------------------------------------------------------------
+        
+        // $age=20;
+        // $resultat = $validator->validate($age, [
+        //     new LessThan([
+        //         "value"=>120,
+        //         "message"=>"L'âge doit être inferieur à {{ value }} mais vous avez saisie {{ compared_value }}"
+        //     ]),
+        //     new GreaterThan([
+        //         "value"=>0,
+        //         "message"=>"L'âge doit être supérieur à 0"
+        //     ])
+        // ]);
+
+        // if($resultat->count() > 0){
+        //     dd("Il y a des erreurs", $resultat);
+        // }
+
+        // dd("Tout vas bien");
+
+
+        //-------------------------------------------------------------------------------------------------------------------------
+        // Validation de tableaux associatifs
+        //-------------------------------------------------------------------------------------------------------------------------
+
+        // $client = [
+        //     "nom"=>"Megret",
+        //     "prenom"=>"Micha",
+        //     "voiture"=> [
+        //         "marque"=>"Citroëna",
+        //         "couleur"=>"Blanche"
+        //     ]
+        // ];
+
+
+        // $collection = new Collection([
+        //     "nom"=>new NotBlank(["message"=>"Le nom ne doit pas être vide"]),
+        //     "prenom"=>[
+        //         new NotBlank(["message"=>"Le prénom ne doit pas être vide"]),
+        //         new Length([
+        //             "min"=>3,
+        //             "max"=>25,
+        //             "minMessage"=>"Le prénom doit comporter au moins 3 caractères",
+        //             "maxMessage"=>"Le prénom ne doit pas dépasser les 25 caractères"
+        //         ])
+        //         ],
+        //         "voiture"=>new Collection([
+        //             "marque"=>new Choice([
+        //                 "choices"=>["Citroën", "Renault"],
+        //                 "message"=>"La marque doit être renseignée. Choix : {{ choices }}"
+        //             ]),
+        //             "couleur"=>new NotBlank(["message"=>"La couleur doit être renseignée"])
+        //         ])
+        // ]);
+
+        // $resultat = $validator->validate($client, $collection);
+        // dd($resultat);
+
+
+        //-------------------------------------------------------------------------------------------------------------------------
+        // Validation d'objet en yaml (voir config/validator/validator_product.yaml)
+        //----------------------------------------------------------------------------------------------------------------------
+
+        // $product = new Product;
+
+        // $product->setName("Verre en bois");
+        // $product->setPrice(1200);
+
+        // $resultat = $validator->validate($product);
+
+        // dd($resultat);
+
+
+
+        //-------------------------------------------------------------------------------------------------------------------------
+        // Validation d'objet en php, ici entité Product (via la méthode loadValidatorMetadata() remplacé par les @Assert de l'entité Product)
+        //----------------------------------------------------------------------------------------------------------------------
+
+        // $product = new Product;
+
+        // $product->setName("Verre en bois");
+        // $product->setPrice(11000);
+
+        // $resultat = $validator->validate($product);
+
+        // dd($resultat);
+
+        //-------------------------------------------------------------------------------------------------------------------------
+        // ??? Il est possible de spécifier la validation d'un champ en particulier depuis le Type du formulaire avec constraints()
+        //----------------------------------------------------------------------------------------------------------------------
+       
+
+        //-------------------------------------------------------------------------------------------------------------------------
+        // Validation en tenant compte des groupes de validation, Defaut représente les validations sans groupe défini
+        // Equivalent à "validation_groups" sur le formulaire
+        //----------------------------------------------------------------------------------------------------------------------
+        // $product = new Product;
+        // $resultat = $validator->validate($product, null, ["Default", "with-price"]);
+        // dd($resultat);
+
+
+        //-------------------------------------------------------------------------------------------------------------------------
+        //Traitement et affichage du formulaire
+        //----------------------------------------------------------------------------------------------------------------------
+       
         $product = $productRepository->find($id);
-        $form = $this->createForm(ProductType::class, $product);
+        $form = $this->createForm(ProductType::class, $product, [
+            "validation_groups"=>[
+                "with-price",
+                "Default"
+            ]
+        ]);
         //$form->setData($product);
 
         $form->handleRequest($request);
 
-        if($form->isSubmitted()){
+        if($form->isSubmitted() && $form->isValid()){
             //$product = $form->getData(); => Pas nécessaire car apres handelRequest la variable product à été mis à jour
 
             $product->setSlug(strtolower($slugify->slugify($product->getName())));
@@ -213,8 +321,8 @@ class ProductController extends AbstractController
             // $response->setStatusCode(302); ==> Simplifiable par la class RedirectResponse ci après
 
             // $response = new RedirectResponse($url);
-
             // return $response;
+
             return $this->redirectToRoute("product_show", [
                 "category_slug"=>$product->getCategory()->getSlug(),
                 "slug"=>$product->getSlug()
@@ -222,7 +330,7 @@ class ProductController extends AbstractController
         }
 
         $formView = $form->createView();
-
+        
         return $this->render("product/edit.html.twig", [
             "product"=>$product,
             "formView"=>$formView

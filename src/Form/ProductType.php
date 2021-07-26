@@ -18,6 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 use function PHPUnit\Framework\isNull;
 
@@ -31,7 +32,10 @@ class ProductType extends AbstractType
                 "attr" => [
                     //'class'=>"form-control mt-2 mb-2",
                     "placeholder" => "Saisissez le nom du produit"
-                ]
+                ],
+                "required"=>false,
+                // "constraints"=> new NotBlank(["message"=>"Validation : Le nom du produit est obligatoire"]) 
+                // => Remplacé par @Asset dans l'entité Product
             ])
             ->add("shortDescription", TextareaType::class, [
                 "label" => "Description du produit",
@@ -55,7 +59,7 @@ class ProductType extends AbstractType
                     "placeholder" => "Saisissez le prix du produit"
                 ],
                 "divisor"=>100
-            ]) //Admettons que MoneyType n'existe pas nous allons créer notre propre type de champs
+            ]) 
             ->add("mainPicture", UrlType::class, [
                 "label" => "Image du produit",
                 "attr" => [

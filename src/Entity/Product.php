@@ -2,8 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\ProductRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ProductRepository;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 /**
  * @ORM\Entity(repositoryClass=ProductRepository::class)
@@ -19,11 +21,16 @@ class Product
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Le nom du produit est obligatoire")
+     * @Assert\Length(min=3, max=255, minMessage="Le nom du produit doit comporter au moins 3 caractères", 
+     * maxMessage="Le nom du produit doit comporter au maximum 255 caractères")
      */
     private $name;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="float")
+     * @Assert\NotBlank(message="Le prix du produit est obligatoire", groups={"with-price"})
+     * @Assert\GreaterThan(value=0, message="Le prix du produit doit être supérieur à 0", groups={"with-price"})
      */
     private $price;
 
@@ -39,11 +46,15 @@ class Product
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="L'image est obligatoire")
+     * @Assert\Url(message="L'url de l'image n'est pas valide")
      */
     private $mainPicture;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank(message="La description est obligatoire")
+     * @Assert\Length(min=20, minMessage="La description doit faire au minimum 20 caractères")
      */
     private $shortDescription;
 
@@ -61,7 +72,7 @@ class Product
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName(?string $name): self
     {
         $this->name = $name;
 
@@ -121,10 +132,29 @@ class Product
         return $this->shortDescription;
     }
 
-    public function setShortDescription(string $shortDescription): self
+    public function setShortDescription(?string $shortDescription): self
     {
         $this->shortDescription = $shortDescription;
 
         return $this;
     }
+
+
+    //Méthode de validation d'une entité (pour ValidatorInetrface)
+    //Peut être remplacer par les annotations @Assert
+
+    // public static function loadValidatorMetadata(ClassMetadata $metadata): void
+    // {
+    //     $metadata->addPropertyConstraints("name", [
+    //         new Assert\NotBlank(["message"=>"Le nom du produit est obligatoire"]),
+    //         new Assert\Length([
+    //             "min"=>3,
+    //             "max"=>255,
+    //             "minMessage"=>"Le nom du produit doit comporter au moins 3 caractères",
+    //             "maxMessage"=>"Le nom du produit ne doit pas dépasser 255 caractères"
+    //         ])
+    //     ]);
+
+    //     $metadata->addPropertyConstraint("price", new Assert\NotBlank(["message"=>"Le prix du produit doit être renseigné"]));
+    // }
 }
