@@ -14,6 +14,7 @@
     </ol>
 
     <h1>Catégorie : {{category.name}}</h1>
+    <a class="btn btn-primary" href="/admin/category/{{ category.id }}/edit">Editer</a>
 
     <div class="row">
     {% for p in category.products %}

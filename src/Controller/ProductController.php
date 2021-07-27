@@ -11,28 +11,29 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\Choice;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Collection;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Validator\Constraints\Choice;
-use Symfony\Component\Validator\Constraints\Collection;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ProductController extends AbstractController
 {
     /**
-     * @Route("/{slug}", name="product_category")
+     * @Route("/{slug}", name="product_category", priority=-1)
      */
-    public function category($slug, CategoryRepository $categoryRepository): Response
+    public function category($slug, CategoryRepository $categoryRepository, Request $request): Response
     {
         $category = $categoryRepository->findOneBy([
             "slug" => $slug
         ]);
         
-        if(!$category){var_dump((1));
-            //throw new NotFoundHttpException("La catégorie $slug n'existe pas"); => Alternative
-            throw $this->createNotFoundException("La catégorie n'existe pas");
+        if(!$category){
+            $request->getSession()->set("messageError", "La catégorie n'existe pas");
+            return $this->redirectToRoute("homepage");
         }
 
         return $this->render('product/category.html.twig', [
@@ -42,7 +43,7 @@ class ProductController extends AbstractController
     }
 
     /**
-     * @Route("/{category_slug}/{slug}", name="product_show")
+     * @Route("/{category_slug}/{slug}", name="product_show", priority=-1)
      */
     public function show($slug, ProductRepository $productRepository){
 

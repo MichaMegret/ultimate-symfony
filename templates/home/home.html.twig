@@ -4,6 +4,11 @@
 {% endblock %}
 
 {% block body %}
+
+    {% if messageError %}
+        <div class="alert alert-danger">{{ messageError }}</div>
+    {% endif %}
+
     <h1>Nos produits phares</h1>
     <div class="row">
         {% for p in products %}

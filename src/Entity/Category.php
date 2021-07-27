@@ -38,6 +38,11 @@ class Category
      */
     private $products;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="categories")
+     */
+    private $editor;
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
@@ -98,6 +103,18 @@ class Category
                 $product->setCategory(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getEditor(): ?User
+    {
+        return $this->editor;
+    }
+
+    public function setEditor(?User $editor): self
+    {
+        $this->editor = $editor;
 
         return $this;
     }

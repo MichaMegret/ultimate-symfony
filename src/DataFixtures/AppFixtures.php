@@ -6,19 +6,23 @@ use Faker\Factory;
 use App\Entity\Product;
 use Liior\Faker\Prices;
 use App\Entity\Category;
+use App\Entity\User;
 use Cocur\Slugify\Slugify;
 use Mmo\Faker\PicsumProvider;
 use Bezhanov\Faker\Provider\Commerce;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 class AppFixtures extends Fixture
 {
     protected $slugger;
+    protected $encoder;
 
-    public function __construct(SluggerInterface $slugger){
+    public function __construct(SluggerInterface $slugger, UserPasswordHasherInterface $encoder){
         $this->slugger = $slugger;
+        $this->encoder=$encoder;
     }
 
     public function load(ObjectManager $manager)
@@ -28,6 +32,28 @@ class AppFixtures extends Fixture
         $faker->addProvider(new Commerce($faker));
         $faker->addProvider(new PicsumProvider($faker));
         $slugify = new Slugify();
+
+        $admin = new User;
+
+        $hash = $this->encoder->hashPassword($admin, "password");
+
+        $admin->setEmail("admin@gmail.com")
+            ->setPassword($hash)
+            ->setFullName("Admin")
+            ->setRoles(["ROLE_ADMIN"]);
+
+        $manager->persist($admin);
+
+        for($i=0; $i<5; $i++){
+            $user = new User;
+
+            $hash = $this->encoder->hashPassword($user, "password");
+
+            $user->setEmail("user$i@gmail.com")
+                ->setFullName($faker->name())
+                ->setPassword($hash);
+            $manager->persist($user);
+        }
 
         for($j=0; $j<3; $j++){
             $category = new Category;
