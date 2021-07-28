@@ -20,7 +20,8 @@
     {% for p in category.products %}
     {% include "Shared/_productCard.html.twig" with {
             "p": p,
-            "col": "-3"
+            "col": "-3",
+            "origine":origine
         } %}
     {% endfor %}
     </div>

@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Panier{% endblock %}
+
+{% block body %}
+
+<h1 class="text-center mb-5">Votre panier</h1>
+
+{% if items | length > 0 %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Produit</th>
+                <th>Prix</th>
+                <th>Quantité</th>
+                <th>Total</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+                <tr class='cartLine'>
+                    <td>{{ item.product.name }}</td>
+                    <td>{{ item.product.price / 100 }} €</td>
+                    <td class='js-qtyContainer'>
+                        <a href="{{ path('cart_decrement', {'id':item.product.id, 'showMessage':0}) }}" class="btn btn-primary btn-sm js-removeToCart"><i class="fas fa-minus"></i></a>
+                        <span class="qtyItem">{{ item.qty }}</span>
+                        <a href="{{ path('cart_add', {'id':item.product.id, 'showMessage':0}) }}" class="btn btn-primary btn-sm js-addToCart"><i class="fas fa-plus"></i></a>
+                    </td>
+                    <td class="js-amountTotalItem">{{ item.total / 100 }} €</td>
+                    <td>
+                        <a href="{{ path('cart_delete', {"id":item.product.id}) }}" class="btn btn-sm btn-danger">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <td colspan="3">Total :</td>
+            <td colspan="2"><span class="amountTotalCart">{{ total / 100 }}</span> €</td>
+        </tfoot>
+    </table>
+{% else %}
+    <h3 class="text-center">Aucun article dans votre panier</h3>
+{% endif %}
+
+{% endblock %}

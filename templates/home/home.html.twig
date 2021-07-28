@@ -14,7 +14,8 @@
         {% for p in products %}
             {% include "Shared/_productCard.html.twig" with {
             "p": p,
-            "col": ""
+            "col": "",
+            "origine":"homepage"
         } %}
         {% endfor %}
     </div>

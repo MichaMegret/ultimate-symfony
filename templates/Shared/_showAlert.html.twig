@@ -1,0 +1,9 @@
+<div id="messageMasterContainer">
+{% for rubrique, messages in app.flashes %}
+    <div class="alert alert-{{ rubrique }}">
+        {% for message in messages %}
+            <span>{{ message }}</span><br/>
+        {% endfor %}
+    </div>
+{% endfor %}
+</div>

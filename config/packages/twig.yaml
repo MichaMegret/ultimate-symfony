@@ -3,9 +3,11 @@ twig:
     form_themes:
         - bootstrap_4_layout.html.twig 
     globals:
-        # permet de difinir des variables globales pour yous les template twig
+        # permet de difinir des variables globales pour tous les template twig
+        #Il est préférable de créer une classe nous même, étendue depuis CategoryRepository que nous integrerons ici
+        # mais cela marche avec CategoryRepository egalement
         categoryRepository: "@App\\Repository\\CategoryRepository" 
-        #Il est préférable de créer une classe nous même, étendue depuis CategoryRepository 
+        cartService: "@App\\Cart\\CartService"
 
 when@test:
     twig:

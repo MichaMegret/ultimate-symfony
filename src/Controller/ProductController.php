@@ -38,14 +38,15 @@ class ProductController extends AbstractController
 
         return $this->render('product/category.html.twig', [
             'slug' => $slug,
-            'category' => $category
+            'category' => $category,
+            "origine" => "/".$slug
         ]);
     }
 
     /**
      * @Route("/{category_slug}/{slug}", name="product_show", priority=-1)
      */
-    public function show($slug, ProductRepository $productRepository){
+    public function show($slug, ProductRepository $productRepository, Request $request){
 
         $product = $productRepository->findOneBy([
             "slug"=>$slug

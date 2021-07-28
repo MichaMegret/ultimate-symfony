@@ -97,7 +97,7 @@ class CategoryController extends AbstractController
 
         if(!$category){
             //throw new NotFoundHttpException("La catégorie $slug n'existe pas"); => Alternative
-            $this->session->set("messageError", "La catégorie n'existe pas");
+            $request->getSession()->set("messageError", "La catégorie n'existe pas");
             return $this->redirectToRoute("homepage");
         }
 
