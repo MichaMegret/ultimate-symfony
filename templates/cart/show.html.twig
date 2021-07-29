@@ -7,7 +7,7 @@
 <h1 class="text-center mb-5">Votre panier</h1>
 
 {% if items | length > 0 %}
-    <table class="table">
+    <table class="table mb-5">
         <thead>
             <tr>
                 <th>Produit</th>
@@ -21,13 +21,13 @@
             {% for item in items %}
                 <tr class='cartLine'>
                     <td>{{ item.product.name }}</td>
-                    <td>{{ item.product.price / 100 }} €</td>
+                    <td>{{ item.product.price | format_number({fraction_digit: 2})  }} €</td>
                     <td class='js-qtyContainer'>
                         <a href="{{ path('cart_decrement', {'id':item.product.id, 'showMessage':0}) }}" class="btn btn-primary btn-sm js-removeToCart"><i class="fas fa-minus"></i></a>
                         <span class="qtyItem">{{ item.qty }}</span>
                         <a href="{{ path('cart_add', {'id':item.product.id, 'showMessage':0}) }}" class="btn btn-primary btn-sm js-addToCart"><i class="fas fa-plus"></i></a>
                     </td>
-                    <td class="js-amountTotalItem">{{ item.total / 100 }} €</td>
+                    <td class="js-amountTotalItem">{{ item.total | format_number({fraction_digit: 2})  }} €</td>
                     <td>
                         <a href="{{ path('cart_delete', {"id":item.product.id}) }}" class="btn btn-sm btn-danger">
                             <i class="fas fa-trash"></i>
@@ -38,9 +38,33 @@
         </tbody>
         <tfoot>
             <td colspan="3">Total :</td>
-            <td colspan="2"><span class="amountTotalCart">{{ total / 100 }}</span> €</td>
+            <td colspan="2"><span class="amountTotalCart">{{ total | format_number({fraction_digit: 2})  }}</span> €</td>
         </tfoot>
     </table>
+
+    {% if app.user %}
+    
+        <br><hr><br>
+
+        <h2 class="text-center mt-2 mb-2">Confirmation de commande</h2>
+
+        {{ form_start(confirmationForm, {"action": path('purchase_confirm')}) }}
+        
+        {{ form_widget(confirmationForm) }}
+
+        <button type="submit" class="btn btn-primary mx-auto d-block my-3">Valider ma commande</button>
+        
+        {{ form_end(confirmationForm) }}
+    
+    {% else %}
+        
+        <h3>Vous devez être connecté pour valider une commande</h3>
+        <a href="{{ path('security_login') }}" class="btn btn-success">Connexion</a>
+        ou <a href="#">créer un compte</a>
+    
+    {% endif %}
+
+
 {% else %}
     <h3 class="text-center">Aucun article dans votre panier</h3>
 {% endif %}

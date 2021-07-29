@@ -26,23 +26,37 @@ class AccessBlocker extends AbstractController{
      */
     public function block_access(
     bool $condition=false,
-    string $messageNoAccess="Vous ne disposez pas des droits suffisants",
+    string $messageNoAccess="Vous ne disposez pas des droits suffisants pour accéder à cette page",
     string $messageNoUser="Vous devez être connecté pour accéder à cette page"){
         
         $session = $this->requestStack->getSession();
         $user = $this->getUser();
         
         if(!$user){
-            $session->set("messageError", $messageNoUser);
+            $this->addFlash("danger", $messageNoUser);
             $session->set("tryToConnectRoute", $session->get("urlOrigine"));
             return $this->redirectToRoute("security_login");
         }
 
         elseif(!$condition){
-            $session->set("messageError", $messageNoAccess);
+            $this->addFlash("danger", $messageNoAccess);
             return $this->redirectToRoute("homepage");
         }
 
+        return false;        
+    }
+
+
+    public function redirect_noUser($messageNoUser="Vous devez être connecté pour accéder à cette page"){
+        $session = $this->requestStack->getSession();
+        $user = $this->getUser();
         
+        if(!$user){
+            $this->addFlash("danger", $messageNoUser);
+            $session->set("tryToConnectRoute", $session->get("urlOrigine"));
+            return $this->redirectToRoute("security_login");
+        }
+
+        return false;
     }
 }

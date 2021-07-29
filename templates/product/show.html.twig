@@ -22,7 +22,7 @@
 
 
 
-<h1>{{product.name}} ({{product.price / 100}} &euro;)</h1>
+<h1>{{product.name}} ({{product.price }} &euro;)</h1>
 <div class="row">
     <div class="col-4">
         <img src="{{product.mainPicture}}" alt="Image de {{product.name}}" class="img-fluid">
@@ -30,7 +30,7 @@
     <div class="col">
         <span class="badge bg-info">{{product.category.name}}</span>
         <p>{{product.shortDescription}}</p>
-        <a href="{{ path('cart_add', {"id":product.id}) }}?redirect=homepage" class="btn btn-success btn-lg">
+        <a href="{{ path('cart_add', {"id":product.id}) }}" class="btn btn-success btn-lg js-addToCart">
             <i class="fas fa-shopping-cart"></i>
             <span>Ajouter au panier</span>
         </a>

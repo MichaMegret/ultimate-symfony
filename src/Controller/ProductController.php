@@ -32,7 +32,7 @@ class ProductController extends AbstractController
         ]);
         
         if(!$category){
-            $request->getSession()->set("messageError", "La catégorie n'existe pas");
+            $request->getSession()->set("messageError", "La catégorie n'existe pas bro");
             return $this->redirectToRoute("homepage");
         }
 

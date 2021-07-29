@@ -130,7 +130,7 @@ class ProductType extends AbstractType
         //     $product = $event->getData();
 
         //     if($product!==null){
-        //         $product->setPrice($product->getPrice() / 100);
+        //         $product->setPrice($product->getPrice() );
         //     }
 
             // Ici on veut que la catégorie ne soit pas modifiable pour un produit existant 

@@ -2,9 +2,10 @@
 
 namespace App\Cart;
 
+use App\Cart\CartItem;
 use App\Repository\ProductRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class CartService extends AbstractController{
 
@@ -43,7 +44,7 @@ class CartService extends AbstractController{
     }
 
 
-    public function getTotal(): int{
+    public function getTotal(): float{
 
         $total = 0;
 
@@ -77,7 +78,11 @@ class CartService extends AbstractController{
 
 
     }
-
+    
+    
+    /**
+     * @return CartItem[]
+     */
     public function getDetailedCartItems(): array{
 
         $detailedCart = [];
@@ -122,6 +127,11 @@ class CartService extends AbstractController{
         unset($cart[$id]);
         $this->saveCart($cart);
         return !isset($cart[$id]);
+    }
+
+
+    public function empty(){
+        $this->saveCart([]);
     }
 
 }

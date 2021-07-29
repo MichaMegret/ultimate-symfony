@@ -28,11 +28,13 @@ class LoginFormAuthenticator extends AbstractAuthenticator
     }
 
 
+
+
     public function supports(Request $request): ?bool
     {
         //Toujours avoirs l'url sous la main même pour les méthodes n'ayant pas accés à Request
         $this->session->set("urlOrigine", $request->getPathInfo());
-        //Définition des conditions du contrôle
+        //Définition les conditions du contrôle de login
         $authCondition = ($request->attributes->get("_route") === "security_login" && $request->isMethod("POST"));
         //S'il ne s'agît pas d'une tentative de connexion via /login
         if($this->session->get("tryToConnectRoute") && $request->getPathInfo()!=="/login"){

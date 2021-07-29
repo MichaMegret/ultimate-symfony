@@ -11,18 +11,19 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class HomeController extends AbstractController
 {
     /**
      * @Route("/", name="homepage")
      */
-    public function homepage(EntityManagerInterface $em/**, ProductRepository $productRepository */, Request $request)
+    public function homepage(EntityManagerInterface $em/**, ProductRepository $productRepository */, Request $request, SessionInterface $session)
     {
         // $product=$productRepository->findOneBy(["slug"=>"chaise-en-bois"], ["name"=>"DESC"]);
         // dd($product);
 
-        $messageError=null;    
+        $messageError=null;   
 
         if($request->getSession()->get("messageError")){
             $messageError = $request->getSession()->get("messageError");

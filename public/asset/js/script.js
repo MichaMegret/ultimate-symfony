@@ -18,13 +18,13 @@ $(document).ready(function () {
 
 
                 if(response.code=="success"){
-                    var amountTotalCart = response.cartAmount / 100;
+                    var amountTotalCart = Number(response.cartAmount).toFixed(2); 
                     var itemsTotalCart = response.cartItems;
                     $(".amountTotalCart").text(amountTotalCart);
                     $("#itemsTotalCart").text(itemsTotalCart);
 
                     if(parent.find(".qtyItem").length){
-                        totalItem = response.totalAmountItem / 100;
+                        totalItem = Number(response.totalAmountItem).toFixed(2) ;
                         parent.find(".qtyItem").text(response.nbThisProduct);
                         ligne.find(".js-amountTotalItem").text(totalItem+" €");
                     }
@@ -57,14 +57,14 @@ $(document).ready(function () {
                 }
 
                 if(response.code=="success"){
-                    var amountTotalCart = response.cartAmount / 100;
+                    var amountTotalCart = Number(response.cartAmount).toFixed(2) ;
                     var itemsTotalCart = response.cartItems;
                     $(".amountTotalCart").text(amountTotalCart);
                     $("#itemsTotalCart").text(itemsTotalCart);
 
                     if(parent.find(".qtyItem").length){
                         if(response.nbThisProduct>0){
-                            totalItem = response.totalAmountItem / 100;
+                            totalItem = Number(response.totalAmountItem).toFixed(2) ;
                             parent.find(".qtyItem").text(response.nbThisProduct);
                             ligne.find(".js-amountTotalItem").text(totalItem+" €");
                         }
