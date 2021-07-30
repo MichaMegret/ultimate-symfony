@@ -102,9 +102,9 @@ class CartController extends AbstractController
         $this->cartService->removeOne($id);
         
         $cartAmount = $this->cartService->getTotal()?$this->cartService->getTotal():0;
-        $cartItems = $this->cartService->getDetailedCartItems()?count($this->cartService->getDetailedCartItems()):0;
-        $nbThisProduct = $this->session->get("cart")?$this->session->get("cart")[$id]:0;
-        $totalAmountItem = $this->cartService->getTotalItem($id)?$this->cartService->getTotalItem($id):0;
+        $cartItems = !empty($this->cartService->getDetailedCartItems())?count($this->cartService->getDetailedCartItems()):0;
+        $nbThisProduct = isset($this->session->get("cart")[$id])?$this->session->get("cart")[$id]:0;
+        $totalAmountItem = $this->cartService->getTotalItem($id)>0.01?$this->cartService->getTotalItem($id):0;
 
         return $this->json([
             "type"=>"success",
@@ -123,7 +123,7 @@ class CartController extends AbstractController
      * @Route("/cart/show", name="cart_show")
      */
     public function show(){
-        
+        dump($this->session->get("cart"));
         $form = $this->createForm(CartConfirmationType::class);
 
         $this->session->set("tryToConnectRoute", $this->session->get("urlOrigine"));

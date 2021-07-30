@@ -2,6 +2,7 @@
 
 namespace App\AccessManager;
 
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -47,6 +48,9 @@ class AccessBlocker extends AbstractController{
     }
 
 
+    /**
+     * @Route("/redirect/noUser", name="redirect_noUser")
+     */
     public function redirect_noUser($messageNoUser="Vous devez être connecté pour accéder à cette page"){
         $session = $this->requestStack->getSession();
         $user = $this->getUser();

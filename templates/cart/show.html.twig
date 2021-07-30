@@ -6,6 +6,8 @@
 
 <h1 class="text-center mb-5">Votre panier</h1>
 
+<div id="cartContainer">
+
 {% if items | length > 0 %}
     <table class="table mb-5">
         <thead>
@@ -41,11 +43,11 @@
             <td colspan="2"><span class="amountTotalCart">{{ total | format_number({fraction_digit: 2})  }}</span> €</td>
         </tfoot>
     </table>
+    
+    <br><hr><br>
 
     {% if app.user %}
     
-        <br><hr><br>
-
         <h2 class="text-center mt-2 mb-2">Confirmation de commande</h2>
 
         {{ form_start(confirmationForm, {"action": path('purchase_confirm')}) }}
@@ -64,9 +66,12 @@
     
     {% endif %}
 
+</div>
 
 {% else %}
-    <h3 class="text-center">Aucun article dans votre panier</h3>
+    <div id="cartContainer">
+        <h3 class="text-center">Aucun article dans votre panier</h3>
+    </div>
 {% endif %}
 
 {% endblock %}

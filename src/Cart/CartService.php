@@ -70,7 +70,7 @@ class CartService extends AbstractController{
         $cart = $this->getCart();
         $product = $this->productRepository->find($id);
 
-        if(!$this->session->get("cart") || !$cart[$id] || !$product){
+        if(empty($this->session->get("cart")) || !isset($cart[$id]) || !$product){
             return $total;
         }
 
@@ -110,11 +110,11 @@ class CartService extends AbstractController{
             return;
         }
 
-        if($cart[$id]==1 || $cart[$id]<=0){
+        if($cart[$id]<=1){
             $this->remove($id);
             return;
         }
-        elseif($cart[$id]>0){
+        else{
             $cart[$id]-=1;
         }
 

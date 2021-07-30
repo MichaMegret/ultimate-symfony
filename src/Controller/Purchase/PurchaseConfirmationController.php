@@ -7,6 +7,7 @@ use App\Cart\CartService;
 use App\Form\CartConfirmationType;
 use App\AccessManager\AccessBlocker;
 use App\Entity\PurchaseItem;
+use App\Purchase\PurchasePersister;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,12 +22,14 @@ class PurchaseConfirmationController extends AbstractController{
     protected $formFactory;
     protected $cartService;
     protected $manager;
+    protected $persister;
 
-    public function __construct(FormFactoryInterface $formFactory, CartService $cartService, EntityManagerInterface $manager)
+    public function __construct(FormFactoryInterface $formFactory, CartService $cartService, EntityManagerInterface $manager, PurchasePersister $persister)
     {
         $this->formFactory = $formFactory;
         $this->cartService = $cartService;
         $this->manager = $manager;
+        $this->persister = $persister;
     }
 
     /**
@@ -38,7 +41,7 @@ class PurchaseConfirmationController extends AbstractController{
         if($blocker = $accessBlocker->redirect_noUser("Vous devez être connecté pour valider une commande")){
             return $blocker;
         }
-
+            
         // Récupération du formulaire
         //$form = $this->formFactory->create(CartConfirmationType::class);
         $form = $this->createForm(CartConfirmationType::class);
@@ -48,7 +51,7 @@ class PurchaseConfirmationController extends AbstractController{
 
         // Redirection si le formulaire de confirmation n'est pas rempli
         if(!$form->isSubmitted()){
-            $this->addFlash("danger", "Vous devez remplir le formualaire de confirmation au préalable");
+            $this->addFlash("danger", "Vous devez remplir le formulaire de confirmation au préalable");
             return $this->redirectToRoute("cart_show");
         }
 
@@ -60,36 +63,18 @@ class PurchaseConfirmationController extends AbstractController{
             $this->addFlash("danger", "Votre panier est vide, aucune commande en attente de confirmation");
             $this->redirectToRoute("cart_show");
         }
-
+        
         /** @var Purchase */
         $purchase = $form->getData();
-        $user = $this->getUser();
 
-        $purchase->setUser($user)
-            ->setPurchasedAt(new DateTime())
-            ->setTotal($this->cartService->getTotal());
-
-        $this->manager->persist($purchase);
-
-        foreach($this->cartService->getDetailedCartItems() as $cartItem){
-            $purchaseItem = new PurchaseItem;
-            $purchaseItem->setPurchase($purchase)
-                ->setProduct($cartItem->product)
-                ->setQuantity($cartItem->qty)
-                ->setTotal($cartItem->getTotal())
-                ->setProductPrice($cartItem->product->getPrice())
-                ->setProductName($cartItem->product->getName());
-
-            $this->manager->persist($purchaseItem);
-        }
-        
-        $this->manager->flush();
-
+        $this->persister->storePurchase($purchase);
         $this->cartService->empty();
 
-        $this->addFlash("success", "La commande à bien été enregistrée");
+        //$this->addFlash("success", "La commande à bien été enregistrée");
 
-        return $this->redirectToRoute("purchase_index");
+        return $this->redirectToRoute("purchase_payment_form", [
+            "id"=>$purchase->getId()
+        ]);
     }
 
 }

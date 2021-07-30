@@ -61,15 +61,22 @@ $(document).ready(function () {
                     var itemsTotalCart = response.cartItems;
                     $(".amountTotalCart").text(amountTotalCart);
                     $("#itemsTotalCart").text(itemsTotalCart);
-
+                
                     if(parent.find(".qtyItem").length){
-                        if(response.nbThisProduct>0){
-                            totalItem = Number(response.totalAmountItem).toFixed(2) ;
-                            parent.find(".qtyItem").text(response.nbThisProduct);
-                            ligne.find(".js-amountTotalItem").text(totalItem+" €");
+
+                        if(amountTotalCart<0.01){
+                            parent.parents("#cartContainer").html('<h3 class="text-center">Aucun article dans votre panier</h3>');
                         }
+
                         else{
-                            parent.parents(".table").replaceWith('<h3 class="text-center">Aucun article dans votre panier</h3>');
+                            if(response.nbThisProduct>0){
+                                totalItem = Number(response.totalAmountItem).toFixed(2) ;
+                                parent.find(".qtyItem").text(response.nbThisProduct);
+                                ligne.find(".js-amountTotalItem").text(totalItem+" €");
+                            }
+                            else{
+                                parent.parents(".cartLine").remove();
+                            }
                         }
                     }
 

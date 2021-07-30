@@ -23,7 +23,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class ProductController extends AbstractController
 {
     /**
-     * @Route("/{slug}", name="product_category", priority=-1)
+     * @Route("category/{slug}", name="product_category", priority=-1)
      */
     public function category($slug, CategoryRepository $categoryRepository, Request $request): Response
     {
@@ -32,7 +32,7 @@ class ProductController extends AbstractController
         ]);
         
         if(!$category){
-            $request->getSession()->set("messageError", "La catégorie n'existe pas bro");
+            $request->getSession()->set("messageError", "La catégorie n'existe pas");
             return $this->redirectToRoute("homepage");
         }
 

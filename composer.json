@@ -20,6 +20,7 @@
         "mmo/faker-images": "^0.3.0",
         "phpdocumentor/reflection-docblock": "^5.2",
         "sensio/framework-extra-bundle": "^6.1",
+        "stripe/stripe-php": "^7.92",
         "symfony/asset": "5.3.*",
         "symfony/console": "5.3.*",
         "symfony/debug-bundle": "5.3.*",
