@@ -41,3 +41,25 @@ services:
         arguments:
             $secretKey: '%env(STRIPE_SECRET_KEY)%'
             $publicKey: '%env(STRIPE_PUBLIC_KEY)%'
+
+
+    # Exemple d'ajout de méthode aux écouteurs d'événements Symfony (Listener) en fonction du type d'event
+    # App\EventDispatcher\PrenomListener:
+    #     tags: 
+    #         [
+    #             {
+    #                 name: kernel.event_listener, 
+    #                 event: kernel.request, 
+    #                 method: addPrenomToAttributes
+    #             },
+    #             {
+    #                 name: kernel.event_listener, 
+    #                 event: kernel.controller, 
+    #                 method: test1
+    #             },
+    #             {
+    #                 name: kernel.event_listener, 
+    #                 event: kernel.response, 
+    #                 method: test2
+    #             }
+    #         ]

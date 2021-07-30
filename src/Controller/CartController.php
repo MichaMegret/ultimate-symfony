@@ -38,7 +38,7 @@ class CartController extends AbstractController
         if(!$product){
             //$this->addFlash("danger", "Le produit n'existe pas");
             //return $this->redirectToRoute("homepage");
-            return $this->json([
+            return ([
                 "type"=>"danger",
                 "message"=>"Le produit n'existe pas",
                 "code"=>"error"
@@ -123,7 +123,6 @@ class CartController extends AbstractController
      * @Route("/cart/show", name="cart_show")
      */
     public function show(){
-        dump($this->session->get("cart"));
         $form = $this->createForm(CartConfirmationType::class);
 
         $this->session->set("tryToConnectRoute", $this->session->get("urlOrigine"));

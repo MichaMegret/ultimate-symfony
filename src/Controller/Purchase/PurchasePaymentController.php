@@ -29,7 +29,7 @@ class PurchasePaymentController extends AbstractController{
             ($purchase->getUser() !== $this->getUser()) ||
             ($purchase && $purchase->getStatut() === Purchase::STATUT_PAID)
         ) {
-            $this->addFlash("warning", "La commande n'existe pas ou est déjà payée");
+            $this->addFlash("warning", "La commande n'existe pas ou est déjà");
             $this->redirectToRoute("purchase_index");
         }
 

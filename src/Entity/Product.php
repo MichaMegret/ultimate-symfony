@@ -30,7 +30,7 @@ class Product
     private $name;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="decimal", precision=11, scale=2)
      * @Assert\NotBlank(message="Le prix du produit est obligatoire", groups={"with-price"})
      * @Assert\GreaterThan(value=0, message="Le prix du produit doit être supérieur à 0", groups={"with-price"})
      */
@@ -60,15 +60,8 @@ class Product
      */
     private $shortDescription;
 
-    /**
-     * @ORM\OneToMany(targetEntity=PurchaseItem::class, mappedBy="product")
-     */
-    private $purchaseItems;
-
-
     public function __construct()
     {
-        $this->purchaseItems = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -170,36 +163,6 @@ class Product
 
     //     $metadata->addPropertyConstraint("price", new Assert\NotBlank(["message"=>"Le prix du produit doit être renseigné"]));
     // }
-
-    /**
-     * @return Collection|PurchaseItem[]
-     */
-    public function getPurchaseItems(): Collection
-    {
-        return $this->purchaseItems;
-    }
-
-    public function addPurchaseItem(PurchaseItem $purchaseItem): self
-    {
-        if (!$this->purchaseItems->contains($purchaseItem)) {
-            $this->purchaseItems[] = $purchaseItem;
-            $purchaseItem->setProduct($this);
-        }
-
-        return $this;
-    }
-
-    public function removePurchaseItem(PurchaseItem $purchaseItem): self
-    {
-        if ($this->purchaseItems->removeElement($purchaseItem)) {
-            // set the owning side to null (unless already changed)
-            if ($purchaseItem->getProduct() === $this) {
-                $purchaseItem->setProduct(null);
-            }
-        }
-
-        return $this;
-    }
 
  
 }

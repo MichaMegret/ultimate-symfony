@@ -5,10 +5,12 @@ namespace App\Controller\Purchase;
 use App\Entity\Purchase;
 use App\Cart\CartService;
 use App\AccessManager\AccessBlocker;
+use App\Event\PurchaseSuccessEvent;
 use App\Repository\PurchaseRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class PurchasePaymentSuccessController extends AbstractController{
 
@@ -21,7 +23,8 @@ class PurchasePaymentSuccessController extends AbstractController{
         PurchaseRepository $purchaseRepository,
         EntityManagerInterface $manager,
         CartService $cartService,
-        AccessBlocker $accessBlocker
+        AccessBlocker $accessBlocker,
+        EventDispatcherInterface $dispatcher
     ) {
 
         // Si l'utilisateur n'est pas connecté 
@@ -43,6 +46,8 @@ class PurchasePaymentSuccessController extends AbstractController{
         $purchase->setStatut(Purchase::STATUT_PAID);
         $manager->flush();
 
+        $purchaseEvent = new PurchaseSuccessEvent($purchase);
+        $dispatcher->dispatch($purchaseEvent, "purchase.success");
 
         $this->addFlash("success", "La commande à bien été payée et sera traitée dans les meilleurs délais");
 

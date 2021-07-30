@@ -29,6 +29,10 @@ const stripe = Stripe(stripePublicKey);
         const form = document.getElementById("payment-form");
         form.addEventListener("submit", function(event) {
             event.preventDefault();
+
+            $.ajax({url: suspicionUrl });
+
+            console.log(clientSecret);
             // Complete payment when the submit button is clicked
             stripe
                 .confirmCardPayment(clientSecret, {
@@ -40,11 +44,12 @@ const stripe = Stripe(stripePublicKey);
                     if (result.error) {
                         // Show error to your customer
                         showError(result.error.message);
+                        //$.ajax({url: unsuspectUrl });
                     } else {
                         // The payment succeeded!
                         //orderComplete(result.paymentIntent.id);*
                         console.log(result);
-                        window.location.href = redirectAfterSuccessUrl;
+                        //window.location.href = redirectAfterSuccessUrl;
                     }
                 });
         });

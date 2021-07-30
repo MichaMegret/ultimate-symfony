@@ -18,15 +18,18 @@ use Symfony\Component\Validator\Constraints\Collection;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ProductController extends AbstractController
 {
     /**
-     * @Route("category/{slug}", name="product_category", priority=-1)
+     * @Route("/category/{slug}", name="product_category", priority=-1)
      */
-    public function category($slug, CategoryRepository $categoryRepository, Request $request): Response
+    public function category($slug, CategoryRepository $categoryRepository, Request $request, SessionInterface $session): Response
     {
+        // $session->clear();
+        dump($session);
         $category = $categoryRepository->findOneBy([
             "slug" => $slug
         ]);
@@ -43,11 +46,17 @@ class ProductController extends AbstractController
         ]);
     }
 
+
+
+
+
+
     /**
      * @Route("/{category_slug}/{slug}", name="product_show", priority=-1)
      */
-    public function show($slug, ProductRepository $productRepository, Request $request){
+    public function show($slug, $prenom, ProductRepository $productRepository, Request $request){
 
+        // dd($prenom);
         $product = $productRepository->findOneBy([
             "slug"=>$slug
         ]);

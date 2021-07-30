@@ -44,7 +44,7 @@ class Purchase
     private $city;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="decimal", precision=11, scale=2)
      */
     private $total;
 
@@ -67,6 +67,11 @@ class Purchase
      * @ORM\OneToMany(targetEntity=PurchaseItem::class, mappedBy="purchase", orphanRemoval=true)
      */
     private $purchaseItems;
+
+    /**
+     * @ORM\OneToOne(targetEntity=PurchaseSuspicion::class, mappedBy="purchase", cascade={"persist", "remove"})
+     */
+    private $suspicion;
 
 
     public function __construct()
@@ -204,5 +209,23 @@ class Purchase
 
         return $this;
     }
+
+    public function getSuspicion(): ?PurchaseSuspicion
+    {
+        return $this->suspicion;
+    }
+
+    public function setSuspicion(PurchaseSuspicion $suspicion): self
+    {
+        // set the owning side of the relation if necessary
+        if ($suspicion->getPurchase() !== $this) {
+            $suspicion->setPurchase($this);
+        }
+
+        $this->suspicion = $suspicion;
+
+        return $this;
+    }
+
 
 }
