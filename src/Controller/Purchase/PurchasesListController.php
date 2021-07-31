@@ -35,7 +35,7 @@ class PurchasesListController extends AbstractController{
         }
 
         return $this->render("purchase/index.html.twig", [
-            "purchases"=>$purchaseRepository->findBy(["user"=> $user], ["id"=>"DESC"])
+            "purchases"=>$purchaseRepository->findBy(["user"=> $user], ["purchasedAt"=>"DESC"])
         ]);
 
     }

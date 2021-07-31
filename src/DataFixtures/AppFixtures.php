@@ -34,6 +34,8 @@ class AppFixtures extends Fixture
         $faker->addProvider(new Commerce($faker));
         $faker->addProvider(new PicsumProvider($faker));
         $slugify = new Slugify();
+        
+        $users = [];
 
         $admin = new User;
 
@@ -46,7 +48,7 @@ class AppFixtures extends Fixture
 
         $manager->persist($admin);
 
-        $users = [];
+        $users[] = $admin;
 
         for($i=0; $i<5; $i++){
             $user = new User;
@@ -67,7 +69,7 @@ class AppFixtures extends Fixture
         for($j=0; $j<3; $j++){
             $category = new Category;
             $category->setName($faker->department)
-                ->setSlug(strtolower($slugify->slugify($category->getName())));
+                ->setEditor($faker->randomElement($users));
             $manager->persist($category);
 
             for($i=0; $i < mt_rand(15, 20);$i++){
@@ -76,7 +78,7 @@ class AppFixtures extends Fixture
                 $product
                     ->setName($faker->productName)
                     ->setPrice(mt_rand(1500, 20000) / 100)
-                    ->setSlug(strtolower($slugify->slugify($product->getName())))
+                    // ->setSlug(strtolower($slugify->slugify($product->getName()))) => Mise en place depuis event listener doctrine
                     ->setCategory($category)
                     ->setShortDescription($faker->paragraph())
                     ->setMainPicture($url);

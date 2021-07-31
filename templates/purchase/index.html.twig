@@ -28,11 +28,11 @@
                 <td>
                     <ul>
                         {% for item in p.purchaseItems %}
-                            <li>{{ item.quantity }} x {{ item.productName }} ({{ item.total | format_number({fraction_digit: 2}) }} €)</li>
+                            <li>{{ item.quantity }} x {{ item.productName }} ({{ item.total | number_format(2, ',', ' ') }} €)</li>
                         {% endfor %}
                     </ul>
                 </td>
-                <td>{{ p.total | format_number({fraction_digit: 2}) }} €</td>
+                <td>{{ p.total | number_format(2, ',', ' ') }} €</td>
             </tr>
         {% endfor %}
     </tbody>

@@ -1,14 +1,18 @@
 <?php
 
 namespace App\Entity;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+
+use DateTime;
+use App\Entity\PurchaseItem;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints\DateTime;
+use Doctrine\ORM\Mapping\PrePersist;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 
 /**
  * @ORM\Entity(repositoryClass=PurchaseRepository::class)
+ * @ORM\HasLifecycleCallbacks
  */
 class Purchase
 {
@@ -65,6 +69,7 @@ class Purchase
 
     /**
      * @ORM\OneToMany(targetEntity=PurchaseItem::class, mappedBy="purchase", orphanRemoval=true)
+     * @var Collection<PurchaseItem>
      */
     private $purchaseItems;
 
@@ -78,6 +83,39 @@ class Purchase
     {
         $this->purchaseItems = new ArrayCollection();
     }
+
+    // Utilisation des évenements Doctrine
+    //------------------------------------------------------------------------------------------------------------
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function prePersist(){
+
+        if(empty($this->purchasedAt)){
+            $this->purchasedAt = new DateTime;
+        }
+    }
+
+
+    /**
+     * @ORM\PreFlush
+     */
+    public function preFlush(){
+
+        $total = 0;
+        
+        foreach($this->getPurchaseItems() as $item){
+            /** @var PurchaseItem */
+            $item=$item;
+            $total+=$item->getTotal();
+        }
+        $this->total = $total;
+    }
+
+
+    
+    //------------------------------------------------------------------------------------------------------------
 
     public function getId(): ?int
     {

@@ -18,13 +18,15 @@ $(document).ready(function () {
 
 
                 if(response.code=="success"){
-                    var amountTotalCart = Number(response.cartAmount).toFixed(2); 
+                    var amountTotalCart = Number(response.cartAmount).toFixed(2);
+                    amountTotalCart = formatMiller(amountTotalCart); 
                     var itemsTotalCart = response.cartItems;
                     $(".amountTotalCart").text(amountTotalCart);
                     $("#itemsTotalCart").text(itemsTotalCart);
 
                     if(parent.find(".qtyItem").length){
                         totalItem = Number(response.totalAmountItem).toFixed(2) ;
+                        totalItem = formatMiller(totalItem);
                         parent.find(".qtyItem").text(response.nbThisProduct);
                         ligne.find(".js-amountTotalItem").text(totalItem+" €");
                     }
@@ -58,6 +60,7 @@ $(document).ready(function () {
 
                 if(response.code=="success"){
                     var amountTotalCart = Number(response.cartAmount).toFixed(2) ;
+                    amountTotalCart = formatMiller(amountTotalCart);
                     var itemsTotalCart = response.cartItems;
                     $(".amountTotalCart").text(amountTotalCart);
                     $("#itemsTotalCart").text(itemsTotalCart);
@@ -71,6 +74,7 @@ $(document).ready(function () {
                         else{
                             if(response.nbThisProduct>0){
                                 totalItem = Number(response.totalAmountItem).toFixed(2) ;
+                                totalItem = formatMiller(totalItem);
                                 parent.find(".qtyItem").text(response.nbThisProduct);
                                 ligne.find(".js-amountTotalItem").text(totalItem+" €");
                             }
@@ -89,3 +93,8 @@ $(document).ready(function () {
         });
     })
 });
+
+
+function formatMiller(nombre) {
+    return nombre.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ").replace(".", ",");
+}

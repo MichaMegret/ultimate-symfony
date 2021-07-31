@@ -73,6 +73,7 @@ class PurchaseItem
     public function setPurchase(?Purchase $purchase): self
     {
         $this->purchase = $purchase;
+        $purchase->addPurchaseItem($this);
 
         return $this;
     }
