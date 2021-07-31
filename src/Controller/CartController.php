@@ -120,6 +120,7 @@ class CartController extends AbstractController
 
 
     /**
+     * Affichage d'un produit
      * @Route("/cart/show", name="cart_show")
      */
     public function show(){
