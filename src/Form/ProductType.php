@@ -58,7 +58,7 @@ class ProductType extends AbstractType
                     //"class"=>"form-control mt-2 mb-2",
                     "placeholder" => "Saisissez le prix du produit"
                 ],
-                "divisor"=>100
+                //"divisor"=>100
             ]) 
             ->add("mainPicture", UrlType::class, [
                 "label" => "Image du produit",
