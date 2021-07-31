@@ -31,7 +31,6 @@ class ProductController extends AbstractController
     public function category($slug, CategoryRepository $categoryRepository, Request $request, SessionInterface $session): Response
     {
         // $session->clear();
-        dump($session);
         $category = $categoryRepository->findOneBy([
             "slug" => $slug
         ]);
