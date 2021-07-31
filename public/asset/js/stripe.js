@@ -49,7 +49,7 @@ const stripe = Stripe(stripePublicKey);
                         // The payment succeeded!
                         //orderComplete(result.paymentIntent.id);*
                         console.log(result);
-                        //window.location.href = redirectAfterSuccessUrl;
+                        window.location.href = redirectAfterSuccessUrl;
                     }
                 });
         });

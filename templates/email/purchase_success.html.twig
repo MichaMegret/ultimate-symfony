@@ -1,0 +1,41 @@
+<h1>Votre commande n°{{ purchase.id }} à bien été enregistrée</h1>
+
+<p>
+    Merci à vous {{ user.fullName }} :) <br><br>
+    Le paiement de votre commande n°{{ purchase.id }} à bien été reçu par Le Shop d'Amande.<br>
+    Vous devriez voir votre commande passée au statut 'payée' sur votre compte dans la rubrique 'Mes commandes'.<br>
+    Si ce n'est pas le cas, merci de nous contacter en précisant votre numéro de commande et la date du paiement.
+</p>
+
+<h3>Détail de la commande</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>Produit</th>
+            <th>Quantité</th>
+            <th>Prix unitaire</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for item in purchase.purchaseItems %}
+            <tr>
+                <td>{{ item.productName }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.productPrice }}</td>
+                <td>{{ item.total | number_format("2", ",", " ") }} €</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+
+    <tfoot>
+        <tr>
+            <td colspan='3'>Total</td>
+            <td>
+                {{ purchase.total | number_format("2", ",", " ") }} €
+            </td>
+        </tr>
+    </tfoot>
+</table>
