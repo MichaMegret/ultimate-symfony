@@ -1,4 +1,6 @@
 $(document).ready(function () {
+
+
     $("body").on("click", "a.js-addToCart", function(e){
         e.preventDefault();
         const url = $(this).attr("href");
@@ -18,17 +20,19 @@ $(document).ready(function () {
 
 
                 if(response.code=="success"){
-                    var amountTotalCart = Number(response.cartAmount).toFixed(2);
-                    amountTotalCart = formatMiller(amountTotalCart); 
+                    // var amountTotalCart = Number(response.cartAmount).toFixed(2);
+                    // amountTotalCart = formatMiller(amountTotalCart); 
+                    amountTotalCart = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(response.cartAmount);
                     var itemsTotalCart = response.cartItems;
                     $(".amountTotalCart").text(amountTotalCart);
                     $("#itemsTotalCart").text(itemsTotalCart);
 
                     if(parent.find(".qtyItem").length){
-                        totalItem = Number(response.totalAmountItem).toFixed(2) ;
-                        totalItem = formatMiller(totalItem);
+                        // totalItem = Number(response.totalAmountItem).toFixed(2) ;
+                        // totalItem = formatMiller(totalItem);
+                        totalItem = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(response.totalAmountItem);   
                         parent.find(".qtyItem").text(response.nbThisProduct);
-                        ligne.find(".js-amountTotalItem").text(totalItem+" €");
+                        ligne.find(".js-amountTotalItem").text(totalItem);
                     }
 
                 }
@@ -59,8 +63,9 @@ $(document).ready(function () {
                 }
 
                 if(response.code=="success"){
-                    var amountTotalCart = Number(response.cartAmount).toFixed(2) ;
-                    amountTotalCart = formatMiller(amountTotalCart);
+                    // var amountTotalCart = Number(response.cartAmount).toFixed(2) ;
+                    // amountTotalCart = formatMiller(amountTotalCart);
+                    amountTotalCart = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(response.cartAmount);
                     var itemsTotalCart = response.cartItems;
                     $(".amountTotalCart").text(amountTotalCart);
                     $("#itemsTotalCart").text(itemsTotalCart);
@@ -73,10 +78,11 @@ $(document).ready(function () {
 
                         else{
                             if(response.nbThisProduct>0){
-                                totalItem = Number(response.totalAmountItem).toFixed(2) ;
-                                totalItem = formatMiller(totalItem);
+                                // totalItem = Number(response.totalAmountItem).toFixed(2) ;
+                                // totalItem = formatMiller(totalItem);
+                                totalItem = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(response.totalAmountItem);
                                 parent.find(".qtyItem").text(response.nbThisProduct);
-                                ligne.find(".js-amountTotalItem").text(totalItem+" €");
+                                ligne.find(".js-amountTotalItem").text(totalItem);
                             }
                             else{
                                 parent.parents(".cartLine").remove();

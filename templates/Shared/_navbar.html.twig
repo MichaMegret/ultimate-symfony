@@ -24,7 +24,7 @@
                     <a href="{{ path("cart_show") }}" class="nav-link">
                         <i class="fas fa-shopping-cart"></i> 
                         Panier
-                        (<span class='amountTotalCart'>{{ cartService.getTotal | number_format(2, ',', ' ') }}</span>) €
+                        (<span class='amountTotalCart'>{{ cartService.getTotal | amount }}</span>)
                         <span id='itemsTotalCart' class="badge badge-info">{{ cartService.getDetailedCartItems | length }}</span>
                     </a>
                 </li>
