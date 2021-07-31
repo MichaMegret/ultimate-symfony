@@ -1,0 +1,7 @@
+div.navbar-collapse{
+    display: none;
+}
+
+div.navbar-collapse.open{
+    display: block;
+}

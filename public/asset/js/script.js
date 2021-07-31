@@ -1,6 +1,11 @@
 $(document).ready(function () {
 
 
+    $("button.navbar-toggler").click(function (e) { 
+        $(this).next().toggleClass("open");
+        
+    });
+
     $("body").on("click", "a.js-addToCart", function(e){
         e.preventDefault();
         const url = $(this).attr("href");
