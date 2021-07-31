@@ -49,7 +49,7 @@ class PurchasePaymentSuccessController extends AbstractController{
         $purchaseEvent = new PurchaseSuccessEvent($purchase);
         $dispatcher->dispatch($purchaseEvent, "purchase.success");
 
-        //$this->addFlash("success", "La commande à bien été payée et sera traitée dans les meilleurs délais");
+        $this->addFlash("success", "La commande à bien été payée et sera traitée dans les meilleurs délais");
 
         return $this->redirectToRoute("purchase_index");
 

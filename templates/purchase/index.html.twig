@@ -16,6 +16,7 @@
             <th>Date de commande</th>
             <th>Produits</th>
             <th>Total</th>
+            <th>Etat</th>
         </tr>
     </thead>
     <tbody>
@@ -33,6 +34,7 @@
                     </ul>
                 </td>
                 <td>{{ p.total | amount }}</td>
+                <td>{{ p.statut }}</td>
             </tr>
         {% endfor %}
     </tbody>
